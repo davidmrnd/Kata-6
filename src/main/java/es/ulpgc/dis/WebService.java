@@ -12,7 +12,7 @@ public class WebService {
     }
 
     public void init(){
-        Spark.port(7080);
+        Spark.port(8080);
         for(String command : factory) Spark.get(command, execute(command));
     }
 
