@@ -6,15 +6,17 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static java.time.DayOfWeek.*;
+
 public class Calendar {
-    private static final Set<DayOfWeek> workingDays = EnumSet.allOf(DayOfWeek.class);
+    private static final Set<DayOfWeek> workingDays = Set.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
 
     public Iterable<LocalDate> from(LocalDate date) {
         return () -> iteratorFrom(date);}
 
     private Iterator<LocalDate> iteratorFrom(LocalDate date) {
         return new Iterator<LocalDate>() {
-            private LocalDate current = date.minusDays(1);
+            private LocalDate currentDay = date.minusDays(1);
 
             @Override
             public boolean hasNext() {
@@ -24,15 +26,15 @@ public class Calendar {
             @Override
             public LocalDate next() {
                 while (true){
-                    current = current.plusDays(1);
-                    if(isWorkingDate()){
-                        return current;
+                    currentDay = currentDay.plusDays(1);
+                    if(isWorkingDate(currentDay)){
+                        return currentDay;
                     }
                 }
             }
 
-            private boolean isWorkingDate() {
-                return workingDays.contains(current.getDayOfWeek());
+            private boolean isWorkingDate(LocalDate date) {
+                return workingDays.contains(date.getDayOfWeek());
             }
         };
 }
